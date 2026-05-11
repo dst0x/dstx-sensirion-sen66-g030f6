@@ -1,0 +1,443 @@
+Archive member included to satisfy reference by file (symbol)
+
+C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memset.o)
+                              build\main.o (memset)
+C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memcpy-stub.o)
+                              build\drivers\drv_sen66.o (memcpy)
+C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+                              build\bsp\bsp_uart.o (__aeabi_uidiv)
+C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_divsi3.o)
+                              build\drivers\drv_sen66.o (__aeabi_idiv)
+C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+                              C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 build\main.o
+ .data          0x00000000        0x0 build\main.o
+ .bss           0x00000000        0x0 build\main.o
+ .text          0x00000000        0x0 build\bsp\bsp_clock.o
+ .data          0x00000000        0x0 build\bsp\bsp_clock.o
+ .bss           0x00000000        0x0 build\bsp\bsp_clock.o
+ .text          0x00000000        0x0 build\bsp\bsp_gpio.o
+ .data          0x00000000        0x0 build\bsp\bsp_gpio.o
+ .bss           0x00000000        0x0 build\bsp\bsp_gpio.o
+ .text.BSP_GPIO_LedToggle
+                0x00000000        0xe build\bsp\bsp_gpio.o
+ .text          0x00000000        0x0 build\bsp\bsp_i2c.o
+ .data          0x00000000        0x0 build\bsp\bsp_i2c.o
+ .bss           0x00000000        0x0 build\bsp\bsp_i2c.o
+ .text.BSP_I2C_ReadData
+                0x00000000       0x80 build\bsp\bsp_i2c.o
+ .text.BSP_I2C_Scan
+                0x00000000       0x68 build\bsp\bsp_i2c.o
+ .text          0x00000000        0x0 build\bsp\bsp_iwdg.o
+ .data          0x00000000        0x0 build\bsp\bsp_iwdg.o
+ .bss           0x00000000        0x0 build\bsp\bsp_iwdg.o
+ .text          0x00000000        0x0 build\bsp\bsp_systick.o
+ .data          0x00000000        0x0 build\bsp\bsp_systick.o
+ .bss           0x00000000        0x0 build\bsp\bsp_systick.o
+ .text          0x00000000        0x0 build\bsp\bsp_uart.o
+ .data          0x00000000        0x0 build\bsp\bsp_uart.o
+ .bss           0x00000000        0x0 build\bsp\bsp_uart.o
+ .rodata.BSP_DBG_WriteHex.str1.1
+                0x00000000        0x2 build\bsp\bsp_uart.o
+ .text.BSP_DBG_WriteHex
+                0x00000000       0x58 build\bsp\bsp_uart.o
+ .rodata.lut.0  0x00000000       0x10 build\bsp\bsp_uart.o
+ .text          0x00000000        0x0 build\bsp\startup_stm32g030xx.o
+ .data          0x00000000        0x0 build\bsp\startup_stm32g030xx.o
+ .bss           0x00000000        0x0 build\bsp\startup_stm32g030xx.o
+ .text          0x00000000        0x0 build\drivers\drv_sen66.o
+ .data          0x00000000        0x0 build\drivers\drv_sen66.o
+ .bss           0x00000000        0x0 build\drivers\drv_sen66.o
+ .text.DRV_SEN66_CalcCRC
+                0x00000000        0x8 build\drivers\drv_sen66.o
+ .text.DRV_SEN66_StopMeasurement
+                0x00000000       0x28 build\drivers\drv_sen66.o
+ .text.DRV_SEN66_Reset
+                0x00000000       0x38 build\drivers\drv_sen66.o
+ .text.DRV_SEN66_GetState
+                0x00000000        0x8 build\drivers\drv_sen66.o
+ .text          0x00000000        0x0 build\modbus\mb_crc.o
+ .data          0x00000000        0x0 build\modbus\mb_crc.o
+ .bss           0x00000000        0x0 build\modbus\mb_crc.o
+ .text          0x00000000        0x0 build\modbus\mb_slave.o
+ .data          0x00000000        0x0 build\modbus\mb_slave.o
+ .bss           0x00000000        0x0 build\modbus\mb_slave.o
+ .text          0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memset.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memset.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memset.o)
+ .debug_frame   0x00000000       0x2c C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memset.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memset.o)
+ .text          0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memcpy-stub.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memcpy-stub.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memcpy-stub.o)
+ .debug_frame   0x00000000       0x34 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memcpy-stub.o)
+ .ARM.attributes
+                0x00000000       0x2c C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memcpy-stub.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .debug_frame   0x00000000       0x20 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .debug_line_str
+                0x00000000       0xc9 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x00000000       0x1e C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_divsi3.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_divsi3.o)
+ .debug_frame   0x00000000       0x20 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_divsi3.o)
+ .debug_line_str
+                0x00000000       0xc9 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_divsi3.o)
+ .ARM.attributes
+                0x00000000       0x1e C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_divsi3.o)
+ .data          0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .bss           0x00000000        0x0 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .debug_line_str
+                0x00000000       0xc9 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+ .ARM.attributes
+                0x00000000       0x1e C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+FLASH            0x08000000         0x00008000         xr
+SRAM             0x20000000         0x00002000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a
+LOAD C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a
+LOAD build\main.o
+LOAD build\bsp\bsp_clock.o
+LOAD build\bsp\bsp_gpio.o
+LOAD build\bsp\bsp_i2c.o
+LOAD build\bsp\bsp_iwdg.o
+LOAD build\bsp\bsp_systick.o
+LOAD build\bsp\bsp_uart.o
+LOAD build\bsp\startup_stm32g030xx.o
+LOAD build\drivers\drv_sen66.o
+LOAD build\modbus\mb_crc.o
+LOAD build\modbus\mb_slave.o
+                0x20002000                        _estack = (ORIGIN (SRAM) + LENGTH (SRAM))
+
+.isr_vector     0x08000000       0xb8
+                0x08000000                        . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x08000000       0xb8 build\bsp\startup_stm32g030xx.o
+                0x080000b8                        . = ALIGN (0x4)
+
+.text           0x080000b8     0x19fc
+                0x080000b8                        . = ALIGN (0x4)
+ *(.text)
+ .text          0x080000b8      0x114 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_udivsi3.o)
+                0x080000b8                __aeabi_uidiv
+                0x080000b8                __udivsi3
+                0x080001c4                __aeabi_uidivmod
+ .text          0x080001cc      0x1d4 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_divsi3.o)
+                0x080001cc                __divsi3
+                0x080001cc                __aeabi_idiv
+                0x08000398                __aeabi_idivmod
+ .text          0x080003a0        0x4 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a(_dvmd_tls.o)
+                0x080003a0                __aeabi_idiv0
+                0x080003a0                __aeabi_ldiv0
+ *(.text*)
+ .text.startup.main
+                0x080003a4      0x2f4 build\main.o
+                0x080003a4                main
+ .text.BSP_Clock_Init
+                0x08000698       0xbc build\bsp\bsp_clock.o
+                0x08000698                BSP_Clock_Init
+ .text.BSP_GPIO_Init
+                0x08000754      0x124 build\bsp\bsp_gpio.o
+                0x08000754                BSP_GPIO_Init
+ .text.BSP_GPIO_LedOn
+                0x08000878        0xa build\bsp\bsp_gpio.o
+                0x08000878                BSP_GPIO_LedOn
+ .text.BSP_GPIO_LedOff
+                0x08000882        0xc build\bsp\bsp_gpio.o
+                0x08000882                BSP_GPIO_LedOff
+ *fill*         0x0800088e        0x2 
+ .text.check_nack
+                0x08000890       0x24 build\bsp\bsp_i2c.o
+ .text.wait_flag_set.constprop.0
+                0x080008b4       0x24 build\bsp\bsp_i2c.o
+ .text.BSP_I2C_Init
+                0x080008d8       0x48 build\bsp\bsp_i2c.o
+                0x080008d8                BSP_I2C_Init
+ .text.BSP_I2C_BusRecover
+                0x08000920       0x50 build\bsp\bsp_i2c.o
+                0x08000920                BSP_I2C_BusRecover
+ .text.BSP_I2C_WriteCmd
+                0x08000970       0x88 build\bsp\bsp_i2c.o
+                0x08000970                BSP_I2C_WriteCmd
+ .text.BSP_I2C_WriteReadData
+                0x080009f8       0xdc build\bsp\bsp_i2c.o
+                0x080009f8                BSP_I2C_WriteReadData
+ .text.BSP_IWDG_Init
+                0x08000ad4       0x34 build\bsp\bsp_iwdg.o
+                0x08000ad4                BSP_IWDG_Init
+ .text.BSP_IWDG_Refresh
+                0x08000b08       0x10 build\bsp\bsp_iwdg.o
+                0x08000b08                BSP_IWDG_Refresh
+ .text.BSP_SysTick_Init
+                0x08000b18       0x38 build\bsp\bsp_systick.o
+                0x08000b18                BSP_SysTick_Init
+ .text.SysTick_Handler
+                0x08000b50       0x10 build\bsp\bsp_systick.o
+                0x08000b50                SysTick_Handler
+ .text.BSP_SysTick_GetTick
+                0x08000b60        0xc build\bsp\bsp_systick.o
+                0x08000b60                BSP_SysTick_GetTick
+ .text.BSP_SysTick_DelayMs
+                0x08000b6c       0x14 build\bsp\bsp_systick.o
+                0x08000b6c                BSP_SysTick_DelayMs
+ .text.BSP_SysTick_Elapsed
+                0x08000b80       0x14 build\bsp\bsp_systick.o
+                0x08000b80                BSP_SysTick_Elapsed
+ .text.u32_to_dec
+                0x08000b94       0x5c build\bsp\bsp_uart.o
+ .text.BSP_DBG_Init
+                0x08000bf0       0x48 build\bsp\bsp_uart.o
+                0x08000bf0                BSP_DBG_Init
+ .text.BSP_DBG_Write
+                0x08000c38       0x50 build\bsp\bsp_uart.o
+                0x08000c38                BSP_DBG_Write
+ .text.BSP_DBG_WriteStr.part.0
+                0x08000c88       0x22 build\bsp\bsp_uart.o
+ .text.BSP_DBG_WriteStr
+                0x08000caa        0xc build\bsp\bsp_uart.o
+                0x08000caa                BSP_DBG_WriteStr
+ .text.BSP_DBG_WriteInt
+                0x08000cb6       0x34 build\bsp\bsp_uart.o
+                0x08000cb6                BSP_DBG_WriteInt
+ *fill*         0x08000cea        0x2 
+ .text.BSP_DBG_WriteFixed
+                0x08000cec       0xc4 build\bsp\bsp_uart.o
+                0x08000cec                BSP_DBG_WriteFixed
+ .text.BSP_DBG_IRQHandler
+                0x08000db0       0x3c build\bsp\bsp_uart.o
+                0x08000db0                BSP_DBG_IRQHandler
+ .text.USART2_IRQHandler
+                0x08000dec        0x8 build\bsp\bsp_uart.o
+                0x08000dec                USART2_IRQHandler
+ .text.BSP_RS485_Init
+                0x08000df4       0x4c build\bsp\bsp_uart.o
+                0x08000df4                BSP_RS485_Init
+ .text.BSP_RS485_RxCount
+                0x08000e40       0x18 build\bsp\bsp_uart.o
+                0x08000e40                BSP_RS485_RxCount
+ .text.BSP_RS485_RxGet
+                0x08000e58       0x2c build\bsp\bsp_uart.o
+                0x08000e58                BSP_RS485_RxGet
+ .text.BSP_RS485_RxFlush
+                0x08000e84       0x14 build\bsp\bsp_uart.o
+                0x08000e84                BSP_RS485_RxFlush
+ .text.BSP_RS485_Send
+                0x08000e98       0x48 build\bsp\bsp_uart.o
+                0x08000e98                BSP_RS485_Send
+ .text.BSP_RS485_IRQHandler
+                0x08000ee0       0x58 build\bsp\bsp_uart.o
+                0x08000ee0                BSP_RS485_IRQHandler
+ .text.USART1_IRQHandler
+                0x08000f38        0x8 build\bsp\bsp_uart.o
+                0x08000f38                USART1_IRQHandler
+ .text.Default_Handler
+                0x08000f40        0x2 build\bsp\startup_stm32g030xx.o
+                0x08000f40                TIM1_CC_IRQHandler
+                0x08000f40                HardFault_Handler
+                0x08000f40                PVD_IRQHandler
+                0x08000f40                PendSV_Handler
+                0x08000f40                NMI_Handler
+                0x08000f40                I2C1_IRQHandler
+                0x08000f40                RTC_TAMP_IRQHandler
+                0x08000f40                SPI1_IRQHandler
+                0x08000f40                EXTI2_3_IRQHandler
+                0x08000f40                ADC1_IRQHandler
+                0x08000f40                I2C2_IRQHandler
+                0x08000f40                TIM17_IRQHandler
+                0x08000f40                TIM16_IRQHandler
+                0x08000f40                TIM3_IRQHandler
+                0x08000f40                RCC_IRQHandler
+                0x08000f40                EXTI4_15_IRQHandler
+                0x08000f40                DMA1_Channel1_IRQHandler
+                0x08000f40                Default_Handler
+                0x08000f40                TIM14_IRQHandler
+                0x08000f40                EXTI0_1_IRQHandler
+                0x08000f40                SPI2_IRQHandler
+                0x08000f40                SVC_Handler
+                0x08000f40                WWDG_IRQHandler
+                0x08000f40                DMA1_Ch4_7_DMAMUX1_OVR_IRQHandler
+                0x08000f40                DMA1_Channel2_3_IRQHandler
+                0x08000f40                FLASH_IRQHandler
+                0x08000f40                TIM1_BRK_UP_TRG_COM_IRQHandler
+ *fill*         0x08000f42        0x2 
+ .text.Reset_Handler
+                0x08000f44       0x3c build\bsp\startup_stm32g030xx.o
+                0x08000f44                Reset_Handler
+ .text.calc_crc
+                0x08000f80       0x1c build\drivers\drv_sen66.o
+ .text.handle_err
+                0x08000f9c       0x1e build\drivers\drv_sen66.o
+ .text.verify_crc_words
+                0x08000fba       0x30 build\drivers\drv_sen66.o
+ *fill*         0x08000fea        0x2 
+ .text.DRV_SEN66_Init
+                0x08000fec       0x5c build\drivers\drv_sen66.o
+                0x08000fec                DRV_SEN66_Init
+ .text.DRV_SEN66_StartMeasurement
+                0x08001048       0x48 build\drivers\drv_sen66.o
+                0x08001048                DRV_SEN66_StartMeasurement
+ .text.DRV_SEN66_Poll
+                0x08001090      0x228 build\drivers\drv_sen66.o
+                0x08001090                DRV_SEN66_Poll
+ .text.MB_CRC16
+                0x080012b8       0xbc build\modbus\mb_crc.o
+                0x080012b8                MB_CRC16
+ .text.append_crc
+                0x08001374       0x18 build\modbus\mb_slave.o
+ .text.MB_Slave_Init
+                0x0800138c       0x10 build\modbus\mb_slave.o
+                0x0800138c                MB_Slave_Init
+ .text.MB_Slave_RxByte
+                0x0800139c       0x46 build\modbus\mb_slave.o
+                0x0800139c                MB_Slave_RxByte
+ .text.MB_Slave_Process
+                0x080013e2      0x166 build\modbus\mb_slave.o
+                0x080013e2                MB_Slave_Process
+ .text.memset   0x08001548       0x8c C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memset.o)
+                0x08001548                memset
+ .text.memcpy   0x080015d4       0xa8 C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a(libc_a-memcpy-stub.o)
+                0x080015d4                memcpy
+ *(.rodata)
+ .rodata        0x0800167c      0x100 build\drivers\drv_sen66.o
+ .rodata        0x0800177c      0x200 build\modbus\mb_crc.o
+ *(.rodata*)
+ .rodata.main.str1.1
+                0x0800197c      0x125 build\main.o
+ .rodata.BSP_DBG_WriteFixed.str1.1
+                0x08001aa1        0x0 build\bsp\bsp_uart.o
+                                  0x4 (size before relaxing)
+ *fill*         0x08001aa1        0x3 
+ .rodata.div.1  0x08001aa4       0x10 build\bsp\bsp_uart.o
+                0x08001ab4                        . = ALIGN (0x4)
+                0x08001ab4                        _etext = .
+                0x08001ab4                        _sidata = LOADADDR (.data)
+
+.glue_7         0x08001ab4        0x0
+ .glue_7        0x08001ab4        0x0 linker stubs
+
+.glue_7t        0x08001ab4        0x0
+ .glue_7t       0x08001ab4        0x0 linker stubs
+
+.vfp11_veneer   0x08001ab4        0x0
+ .vfp11_veneer  0x08001ab4        0x0 linker stubs
+
+.v4_bx          0x08001ab4        0x0
+ .v4_bx         0x08001ab4        0x0 linker stubs
+
+.iplt           0x08001ab4        0x0
+ .iplt          0x08001ab4        0x0 build\main.o
+
+.rel.dyn        0x08001ab4        0x0
+ .rel.iplt      0x08001ab4        0x0 build\main.o
+
+.data           0x20000000        0x0 load address 0x08001ab4
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _sdata = .
+ *(.data)
+ *(.data*)
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _edata = .
+
+.igot.plt       0x20000000        0x0 load address 0x08001ab4
+ .igot.plt      0x20000000        0x0 build\main.o
+
+.bss            0x20000000      0x208 load address 0x08001ab4
+                0x20000000                        . = ALIGN (0x4)
+                0x20000000                        _sbss = .
+                0x20000000                        __bss_start__ = _sbss
+ *(.bss)
+ *(.bss*)
+ .bss.g_mb      0x20000000       0x6c build\main.o
+ .bss.g_sensor  0x2000006c       0x4c build\main.o
+ .bss.g_tick    0x200000b8        0x4 build\bsp\bsp_systick.o
+ .bss.g_rs485_echo_count
+                0x200000bc        0x2 build\bsp\bsp_uart.o
+ .bss.g_rs485_rx
+                0x200000be       0x44 build\bsp\bsp_uart.o
+ .bss.g_dbg_tx  0x20000102      0x104 build\bsp\bsp_uart.o
+ *(COMMON)
+                0x20000208                        . = ALIGN (0x4)
+ *fill*         0x20000206        0x2 
+                0x20000208                        _ebss = .
+                0x20000208                        __bss_end__ = _ebss
+
+._stack         0x20000208      0x700 load address 0x08001ab4
+                0x20000208                        . = ALIGN (0x8)
+                [!provide]                        PROVIDE (end = .)
+                0x20000308                        . = (. + 0x100)
+ *fill*         0x20000208      0x100 
+                0x20000908                        . = (. + 0x600)
+ *fill*         0x20000308      0x600 
+                0x20000908                        . = ALIGN (0x8)
+
+/DISCARD/
+ libc.a(*)
+ libm.a(*)
+ libgcc.a(*)
+OUTPUT(build\sen66_g030f6.elf elf32-littlearm)
+LOAD linker stubs
+LOAD C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libc.a
+LOAD C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp\libm.a
+LOAD C:/Program Files (x86)/Arm/GNU Toolchain mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v6-m/nofp\libgcc.a
+
+.comment        0x00000000       0x45
+ .comment       0x00000000       0x45 build\main.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\bsp\bsp_clock.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\bsp\bsp_gpio.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\bsp\bsp_i2c.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\bsp\bsp_iwdg.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\bsp\bsp_systick.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\bsp\bsp_uart.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\bsp\startup_stm32g030xx.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\drivers\drv_sen66.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\modbus\mb_crc.o
+                                 0x46 (size before relaxing)
+ .comment       0x00000045        0x0 build\modbus\mb_slave.o
+                                 0x46 (size before relaxing)
+
+.ARM.attributes
+                0x00000000       0x2c
+ .ARM.attributes
+                0x00000000       0x2c build\main.o
+ .ARM.attributes
+                0x0000002c       0x2c build\bsp\bsp_clock.o
+ .ARM.attributes
+                0x00000058       0x2c build\bsp\bsp_gpio.o
+ .ARM.attributes
+                0x00000084       0x2c build\bsp\bsp_i2c.o
+ .ARM.attributes
+                0x000000b0       0x2c build\bsp\bsp_iwdg.o
+ .ARM.attributes
+                0x000000dc       0x2c build\bsp\bsp_systick.o
+ .ARM.attributes
+                0x00000108       0x2c build\bsp\bsp_uart.o
+ .ARM.attributes
+                0x00000134       0x2c build\bsp\startup_stm32g030xx.o
+ .ARM.attributes
+                0x00000160       0x2c build\drivers\drv_sen66.o
+ .ARM.attributes
+                0x0000018c       0x2c build\modbus\mb_crc.o
+ .ARM.attributes
+                0x000001b8       0x2c build\modbus\mb_slave.o
