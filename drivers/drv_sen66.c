@@ -69,6 +69,34 @@ static void parse_meas(const uint8_t *buf, Sen66_Data_t *d)
     d->co2_ppm = d->co2_valid ? co2  : 0U;
 }
 
+/* Apply last-known-good substitution for any zero fields when prior data exists */
+static void apply_last_valid(Sen66_Data_t *d, const Sen66_Data_t *last)
+{
+    /* Substitute zero readings with last valid values for PM measurements */
+    if ((d->pm1_0 == 0U) && (last->pm1_0 != 0U)) { d->pm1_0 = last->pm1_0; }
+    if ((d->pm2_5 == 0U) && (last->pm2_5 != 0U)) { d->pm2_5 = last->pm2_5; }
+    if ((d->pm4_0 == 0U) && (last->pm4_0 != 0U)) { d->pm4_0 = last->pm4_0; }
+    if ((d->pm10  == 0U) && (last->pm10  != 0U)) { d->pm10  = last->pm10;  }
+    
+    /* Substitute zero readings with last valid values for environmental sensors */
+    if ((d->rh   == 0) && (last->rh   != 0)) { d->rh   = last->rh;   }
+    if ((d->temp == 0) && (last->temp != 0)) { d->temp = last->temp; }
+    
+    /* Substitute zero readings with last valid values for gas sensors */
+    if ((d->voc == 0) && (last->voc != 0)) { d->voc = last->voc; }
+    if ((d->nox == 0) && (last->nox != 0)) { d->nox = last->nox; }
+    
+    /* Substitute zero readings with last valid values for CO2 */
+    if ((d->co2_ppm == 0U) && (last->co2_ppm != 0U)) { d->co2_ppm = last->co2_ppm; }
+    
+    /* Also apply last valid for number concentrations */
+    if ((d->nc0_5 == 0U) && (last->nc0_5 != 0U)) { d->nc0_5 = last->nc0_5; }
+    if ((d->nc1_0 == 0U) && (last->nc1_0 != 0U)) { d->nc1_0 = last->nc1_0; }
+    if ((d->nc2_5 == 0U) && (last->nc2_5 != 0U)) { d->nc2_5 = last->nc2_5; }
+    if ((d->nc4_0 == 0U) && (last->nc4_0 != 0U)) { d->nc4_0 = last->nc4_0; }
+    if ((d->nc10  == 0U) && (last->nc10  != 0U)) { d->nc10  = last->nc10;  }
+}
+
 static void parse_nc(const uint8_t *buf, Sen66_Data_t *d)
 {
     d->nc0_5    = BYTES_TO_U16(buf[0U],  buf[1U]);
@@ -177,6 +205,37 @@ Status_t DRV_SEN66_Poll(Sen66_Ctx_t *ctx)
     parse_meas(meas_buf, &ctx->data);
     parse_nc(nc_buf, &ctx->data);
 
+    /* Apply last-known-good substitution for any zero readings */
+    if (ctx->has_valid_data)
+    {
+        apply_last_valid(&ctx->data, &ctx->last_valid_data);
+    }
+
+    /* Update last-known-good snapshot AFTER substitution
+     * Save current data as last_valid only if it contains non-zero values.
+     * This ensures we preserve meaningful data for future fallback.
+     */
+    bool has_nonzero_data = false;
+    if (ctx->data.pm_valid && (ctx->data.pm1_0 != 0U || ctx->data.pm2_5 != 0U ||
+                                ctx->data.pm4_0 != 0U || ctx->data.pm10 != 0U)) {
+        has_nonzero_data = true;
+    }
+    if (ctx->data.env_valid && (ctx->data.rh != 0 || ctx->data.temp != 0)) {
+        has_nonzero_data = true;
+    }
+    if (ctx->data.gas_valid && (ctx->data.voc != 0 || ctx->data.nox != 0)) {
+        has_nonzero_data = true;
+    }
+    if (ctx->data.co2_valid && (ctx->data.co2_ppm != 0U)) {
+        has_nonzero_data = true;
+    }
+    
+    if (has_nonzero_data)
+    {
+        (void)memcpy(&ctx->last_valid_data, &ctx->data, sizeof(Sen66_Data_t));
+        ctx->has_valid_data = true;
+    }
+
     ctx->data_fresh     = true;
     ctx->last_read_tick = BSP_SysTick_GetTick();
     ctx->error_count    = 0U;
@@ -201,4 +260,35 @@ Status_t DRV_SEN66_Reset(Sen66_Ctx_t *ctx)
 Sen66_State_t DRV_SEN66_GetState(const Sen66_Ctx_t *ctx)
 {
     return (ctx != NULL) ? ctx->state : SEN66_STATE_UNINIT;
+}
+
+/**
+ * @brief  Query sensor via I2C Get Data Ready command (0x0202).
+ * @retval true  - New measurement data is available to read.
+ * @retval false - Data not ready, sensor busy, or error.
+ *
+ * Per datasheet: byte[0]=padding (0x00), byte[1]=0x01 ready / 0x00 not ready.
+ * The ready flag is automatically cleared after reading measured values.
+ */
+bool DRV_SEN66_IsDataReady(Sen66_Ctx_t *ctx)
+{
+    uint8_t  ready_buf[3U];
+    Status_t st;
+
+    if (ctx == NULL) { return false; }
+    if ((ctx->state != SEN66_STATE_WARMING_UP) &&
+        (ctx->state != SEN66_STATE_RUNNING))
+    {
+        return false;
+    }
+
+    st = BSP_I2C_WriteReadData(SEN66_I2C_ADDR, SEN66_CMD_DATA_READY,
+                               ready_buf, 3U);
+    if (st != STATUS_OK) { return false; }
+
+    /* Validate CRC of the 2-byte response */
+    if (!crc_ok(ready_buf)) { return false; }
+
+    /* byte[1] == 0x01 means data is ready */
+    return (ready_buf[1U] == 0x01U);
 }

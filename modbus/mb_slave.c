@@ -1,14 +1,44 @@
 /**
  * @file  mb_slave.c
  * @brief Modbus RTU Slave — FC03/FC04 Read Holding/Input Registers.
+ *
+ * Register map:
+ *   0x00–0x10  SEN66 data (see mb_slave.h for details)
+ *   0x11       CO ppm from Infwin CO sensor (USART1_SENSOR_MODE only)
+ *   0x12–0x15  CO debug counters (request, response, timeout, CRC error)
  */
 #include "modbus/mb_slave.h"
 #include "modbus/mb_crc.h"
 #include "bsp/bsp_systick.h"
+#include "bsp/bsp_uart.h"
 #include <stddef.h>
 #include <string.h>
 
+#ifdef USART1_SENSOR_MODE
+static uint16_t s_last_valid_co_ppm = 0U;
+#endif
+
+/**
+ * @brief Build Modbus register map from SEN66 + (optionally) CO sensor data.
+ *
+ * Last-known-good-value (LKGV) logic for CO sensor (register 0x11):
+ *   - If sensor returns co_ppm != 0, update register and save as last valid
+ *   - If sensor returns co_ppm == 0, keep previous last valid value
+ *   - This prevents transient zero readings from polluting Modbus data
+ *
+ * Diagnostic counters (0x12-0x15):
+ *   - Always updated from co->data struct (cumulative across lifetime)
+ *
+ * @param s      SEN66 context (non-NULL)
+ * @param co     CO sensor context (non-NULL when USART1_SENSOR_MODE, else NULL)
+ * @param regs   Output array of MB_REG_COUNT 16-bit values
+ */
+#ifdef USART1_SENSOR_MODE
+static void build_register_map(const Sen66_Ctx_t *s, const CO_Ctx_t *co,
+                                uint16_t *regs)
+#else
 static void build_register_map(const Sen66_Ctx_t *s, uint16_t *regs)
+#endif
 {
     const Sen66_Data_t *d = &s->data;
     regs[0x00U] = d->pm1_0;
@@ -33,6 +63,40 @@ static void build_register_map(const Sen66_Ctx_t *s, uint16_t *regs)
     );
     regs[0x0FU] = (uint16_t)s->state;
     regs[0x10U] = (uint16_t)s->error_count;
+
+    /* 0x11 — CO ppm with LKGV substitution */
+#ifdef USART1_SENSOR_MODE
+    if (co != NULL)
+    {
+        /* Only update if sensor read is non-zero (valid data) */
+        if (co->data.co_ppm != 0U)
+        {
+            s_last_valid_co_ppm = co->data.co_ppm;
+        }
+        regs[0x11U] = s_last_valid_co_ppm;
+
+        /* 0x12–0x15 — Diagnostic counters (always current) */
+        regs[0x12U] = co->data.request_count;
+        regs[0x13U] = co->data.response_count;
+        regs[0x14U] = co->data.timeout_count;
+        regs[0x15U] = co->data.crc_error_count;
+    }
+    else
+    {
+        regs[0x11U] = 0U;
+        regs[0x12U] = 0U;
+        regs[0x13U] = 0U;
+        regs[0x14U] = 0U;
+        regs[0x15U] = 0U;
+    }
+#else
+    /* Debug mode: CO data not available */
+    regs[0x11U] = 0U;
+    regs[0x12U] = 0U;
+    regs[0x13U] = 0U;
+    regs[0x14U] = 0U;
+    regs[0x15U] = 0U;
+#endif
 }
 
 static uint16_t append_crc(uint8_t *buf, uint16_t len)
@@ -74,7 +138,12 @@ void MB_Slave_RxByte(MB_Slave_Ctx_t *ctx, uint8_t byte, uint32_t tick)
     ctx->last_rx_tick = tick;
 }
 
+#ifdef USART1_SENSOR_MODE
+void MB_Slave_Process(MB_Slave_Ctx_t *ctx, const Sen66_Ctx_t *sensor_ctx,
+                      const CO_Ctx_t *co_ctx, uint16_t *tx_len)
+#else
 void MB_Slave_Process(MB_Slave_Ctx_t *ctx, const Sen66_Ctx_t *sensor_ctx, uint16_t *tx_len)
+#endif
 {
     uint16_t regs[MB_REG_COUNT];
     uint16_t crc_rx, crc_calc;
@@ -114,7 +183,11 @@ void MB_Slave_Process(MB_Slave_Ctx_t *ctx, const Sen66_Ctx_t *sensor_ctx, uint16
         goto done;
     }
 
+#ifdef USART1_SENSOR_MODE
+    build_register_map(sensor_ctx, co_ctx, regs);
+#else
     build_register_map(sensor_ctx, regs);
+#endif
 
     byte_cnt = (uint16_t)(qty * 2U);
     ctx->tx_buf[0U] = MB_SLAVE_ID;

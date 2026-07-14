@@ -1,24 +1,50 @@
 /**
  * @file  bsp_uart.c
- * @brief USART2 debug (115200, TX only) + USART1 RS485 (9600) for STM32G030F6P6.
+ * @brief USART1 dual-mode (debug/sensor) + USART2 RS485 (9600) for STM32G031F8P6.
+ *        RS485 Mode: HIGH=Drive(TX), LOW=Logging(RX)
+ * 
+ * USART1 Mode Selection (compile-time):
+ *   - USART1_DEBUG_MODE:  115200 baud, TX-only for debug output
+ *   - USART1_SENSOR_MODE: 9600 baud, bidirectional for CO sensor
  */
 #include "bsp/bsp_uart.h"
+#include "bsp/bsp_gpio.h"
+#include "bsp/bsp_iwdg.h"
 #include "stm32g0xx.h"
+#ifdef USART1_SENSOR_MODE
+#include "drivers/drv_co_infwin.h"
+#endif
 #include <stddef.h>
 
-#define USART2_BRR_115200 (556U)
-#define USART1_BRR_9600   (6667U)
+#define USART1_BRR_115200  (556U)
+#define USART1_BRR_9600    (6667U)
+/* USART2 BRR = fCLK / baud_rate (standard UART, no 256x prescaler)
+ * For fCLK = 64MHz, baud = 9600:
+ * BRR = 64000000 / 9600 = 6666.67 ≈ 6667 (0x1A0B)
+ */
+#define USART2_BRR_9600    (6667U)
 #define DBG_TX_MASK       (DBG_TX_BUF_SIZE   - 1U)
+#define CO_RX_MASK        (CO_RX_BUF_SIZE    - 1U)
 #define RS485_RX_MASK     (RS485_RX_BUF_SIZE - 1U)
 
 typedef char _dbg_pow2[(((DBG_TX_BUF_SIZE)  & (DBG_TX_BUF_SIZE  - 1U)) == 0U) ? 1 : -1];
 typedef char _rx_pow2 [(((RS485_RX_BUF_SIZE) & (RS485_RX_BUF_SIZE - 1U)) == 0U) ? 1 : -1];
 
+#ifdef USART1_DEBUG_MODE
 static struct {
     uint8_t           data[DBG_TX_BUF_SIZE];
     volatile uint16_t head;
     volatile uint16_t tail;
 } g_dbg_tx;
+#endif
+
+#ifdef USART1_SENSOR_MODE
+static struct {
+    uint8_t           data[CO_RX_BUF_SIZE];
+    volatile uint16_t head;
+    volatile uint16_t tail;
+} g_co_rx;
+#endif
 
 static struct {
     uint8_t           data[RS485_RX_BUF_SIZE];
@@ -28,9 +54,16 @@ static struct {
 
 static volatile uint16_t g_rs485_echo_count = 0U;
 
+/* =========================================================================
+ * USART1 MODE-SPECIFIC IMPLEMENTATIONS
+ * =========================================================================*/
+
 /* -------------------------------------------------------------------------
- * Integer formatting
+ * Debug UART (USART1) — TX interrupt-driven @ 115200 baud
+ * Integer formatting helpers included here; only needed in debug mode.
  * -------------------------------------------------------------------------*/
+#ifdef USART1_DEBUG_MODE
+
 static uint8_t u32_to_dec(uint32_t val, char *buf)
 {
     char    tmp[11U];
@@ -43,20 +76,17 @@ static uint8_t u32_to_dec(uint32_t val, char *buf)
     return len;
 }
 
-/* -------------------------------------------------------------------------
- * Debug UART (USART2) — TX interrupt-driven
- * -------------------------------------------------------------------------*/
 void BSP_DBG_Init(void)
 {
-    SET_BIT(RCC->APBENR1, RCC_APBENR1_USART2EN);
-    (void)RCC->APBENR1;
-    USART2->CR1 = 0U;
-    USART2->BRR = USART2_BRR_115200;
-    USART2->CR2 = 0U;
-    USART2->CR3 = 0U;
-    USART2->CR1 = USART_CR1_UE | USART_CR1_TE;
-    NVIC_SetPriority(USART2_IRQn, 2U);
-    NVIC_EnableIRQ(USART2_IRQn);
+    SET_BIT(RCC->APBENR2, RCC_APBENR2_USART1EN);
+    (void)RCC->APBENR2;
+    USART1->CR1 = 0U;
+    USART1->BRR = USART1_BRR_115200;
+    USART1->CR2 = 0U;
+    USART1->CR3 = 0U;
+    USART1->CR1 = USART_CR1_UE | USART_CR1_TE | USART_CR1_RE;  /* Enable TX and RX */
+    NVIC_SetPriority(USART1_IRQn, 2U);
+    NVIC_EnableIRQ(USART1_IRQn);
 }
 
 uint16_t BSP_DBG_Write(const uint8_t *data, uint16_t len)
@@ -71,7 +101,7 @@ uint16_t BSP_DBG_Write(const uint8_t *data, uint16_t len)
         g_dbg_tx.head = next;
         written++;
     }
-    if (written > 0U) { SET_BIT(USART2->CR1, USART_CR1_TXEIE_TXFNFIE); }
+    if (written > 0U) { SET_BIT(USART1->CR1, USART_CR1_TXEIE_TXFNFIE); }
     return written;
 }
 
@@ -146,25 +176,30 @@ void BSP_DBG_WriteHex(const char *prefix, const uint8_t *buf, uint8_t len, const
     BSP_DBG_WriteStr(suffix);
 }
 
-void BSP_DBG_IRQHandler(void)
+void BSP_USART1_IRQHandler(void)
 {
-    if ((USART2->ISR & USART_ISR_TXE_TXFNF) != 0UL)
+    if ((USART1->ISR & USART_ISR_TXE_TXFNF) != 0UL)
     {
         if (g_dbg_tx.tail != g_dbg_tx.head)
         {
-            USART2->TDR = (uint32_t)g_dbg_tx.data[g_dbg_tx.tail];
+            USART1->TDR = (uint32_t)g_dbg_tx.data[g_dbg_tx.tail];
             g_dbg_tx.tail = (uint16_t)((g_dbg_tx.tail + 1U) & DBG_TX_MASK);
         }
-        else { CLR_BIT(USART2->CR1, USART_CR1_TXEIE_TXFNFIE); }
+        else { CLR_BIT(USART1->CR1, USART_CR1_TXEIE_TXFNFIE); }
     }
 }
+#endif /* USART1_DEBUG_MODE */
 
-void USART2_IRQHandler(void) { BSP_DBG_IRQHandler(); }
-
+#ifdef USART1_SENSOR_MODE
 /* -------------------------------------------------------------------------
- * RS485 UART (USART1) — RX interrupt, TX polled, echo suppression
+ * CO Sensor UART (USART1) — Bidirectional @ 9600 baud
  * -------------------------------------------------------------------------*/
-void BSP_RS485_Init(void)
+
+/* Forward declaration — full type available via drv_co_infwin.h (pulled in
+ * transitively through bsp_uart.h → drv_co_infwin.h).                      */
+extern CO_Ctx_t g_co_sensor;   /* Defined in main.c */
+
+void BSP_CO_UART_Init(void)
 {
     SET_BIT(RCC->APBENR2, RCC_APBENR2_USART1EN);
     (void)RCC->APBENR2;
@@ -173,23 +208,150 @@ void BSP_RS485_Init(void)
     USART1->CR2 = 0U;
     USART1->CR3 = 0U;
     USART1->CR1 = USART_CR1_UE | USART_CR1_TE | USART_CR1_RE | USART_CR1_RXNEIE_RXFNEIE;
-    NVIC_SetPriority(USART1_IRQn, 1U);
+    NVIC_SetPriority(USART1_IRQn, 2U);
     NVIC_EnableIRQ(USART1_IRQn);
+}
+
+uint16_t BSP_CO_UART_Write(const uint8_t *data, uint16_t len)
+{
+    uint16_t i;
+    uint32_t timeout_counter;
+    
+    if (data == NULL) { return 0U; }
+    
+    for (i = 0U; i < len; i++)
+    {
+        timeout_counter = 0U;
+        while ((USART1->ISR & USART_ISR_TXE_TXFNF) == 0UL)
+        {
+            timeout_counter++;
+            if ((timeout_counter & 0xFFFU) == 0U) { BSP_IWDG_Refresh(); }
+            if (timeout_counter > 100000UL) { return i; }  /* Timeout */
+        }
+        USART1->TDR = (uint32_t)data[i];
+    }
+    
+    /* Wait for transmission complete */
+    timeout_counter = 0U;
+    while ((USART1->ISR & USART_ISR_TC) == 0UL)
+    {
+        timeout_counter++;
+        if ((timeout_counter & 0xFFFU) == 0U) { BSP_IWDG_Refresh(); }
+        if (timeout_counter > 100000UL) { break; }
+    }
+    
+    return len;
+}
+
+uint16_t BSP_CO_UART_RxCount(void)
+{
+    return (uint16_t)((g_co_rx.head - g_co_rx.tail) & CO_RX_MASK);
+}
+
+uint8_t BSP_CO_UART_RxGet(void)
+{
+    uint8_t byte = 0U;
+    if (g_co_rx.tail != g_co_rx.head)
+    {
+        byte = g_co_rx.data[g_co_rx.tail];
+        g_co_rx.tail = (uint16_t)((g_co_rx.tail + 1U) & CO_RX_MASK);
+    }
+    return byte;
+}
+
+void BSP_CO_UART_RxFlush(void)
+{
+    g_co_rx.tail = g_co_rx.head;
+}
+
+void BSP_USART1_IRQHandler(void)
+{
+    /* RX interrupt */
+    if ((USART1->ISR & USART_ISR_RXNE_RXFNE) != 0UL)
+    {
+        uint8_t byte = (uint8_t)(USART1->RDR & 0xFFUL);
+        /* Forward byte directly to driver; avoids void* cast issues */
+        DRV_CO_RxByte(&g_co_sensor, byte);
+    }
+
+    /* Clear any framing / overrun / noise errors */
+    if ((USART1->ISR & (USART_ISR_FE | USART_ISR_ORE | USART_ISR_NE)) != 0UL)
+    {
+        SET_BIT(USART1->ICR, USART_ICR_FECF | USART_ICR_ORECF | USART_ICR_NECF);
+    }
+}
+#endif /* USART1_SENSOR_MODE */
+
+void USART1_IRQHandler(void) 
+{ 
+    BSP_USART1_IRQHandler(); 
+}
+
+/* -------------------------------------------------------------------------
+ * RS485 UART (USART2) — RX interrupt, TX polled, echo suppression
+ * -------------------------------------------------------------------------*/
+void BSP_RS485_Init(void)
+{
+    /* USART2 uses PCLK (64MHz) */
+    SET_BIT(RCC->APBENR1, RCC_APBENR1_USART2EN);
+    (void)RCC->APBENR1;
+    USART2->CR1 = 0U;
+    USART2->BRR = USART2_BRR_9600;
+    USART2->CR2 = 0U;
+    USART2->CR3 = 0U;
+    USART2->CR1 = USART_CR1_UE | USART_CR1_TE | USART_CR1_RE | USART_CR1_RXNEIE_RXFNEIE;
+    NVIC_SetPriority(USART2_IRQn, 1U);
+    NVIC_EnableIRQ(USART2_IRQn);
 }
 
 void BSP_RS485_Send(const uint8_t *data, uint16_t len)
 {
     uint16_t i;
+    uint32_t timeout_counter;
     if (data == NULL) { return; }
+    
+    /* Flush RX buffer before transmission to avoid echo/garbage */
+    BSP_RS485_RxFlush();
+    
+    /* Small delay to ensure line is stable */
+    for (volatile uint32_t d = 0U; d < 1000U; d++) { }
+    
+    BSP_GPIO_RS485_DriveMode();  /* HIGH = Enable RS485 driver (transmit mode) */
     g_rs485_echo_count = len;
+    
+    /* Small delay after mode switch */
+    for (volatile uint32_t d = 0U; d < 500U; d++) { }
+    
     for (i = 0U; i < len; i++)
     {
-        while ((USART1->ISR & USART_ISR_TXE_TXFNF) == 0UL) { }
-        USART1->TDR = (uint32_t)data[i];
+        timeout_counter = 0U;
+        while ((USART2->ISR & USART_ISR_TXE_TXFNF) == 0UL)
+        {
+            timeout_counter++;
+            if ((timeout_counter & 0xFFFU) == 0U) { BSP_IWDG_Refresh(); }
+        }
+        USART2->TDR = (uint32_t)data[i];
     }
-    while ((USART1->ISR & USART_ISR_TC) == 0UL) { }
-    SET_BIT(USART1->ICR, USART_ICR_ORECF | USART_ICR_FECF | USART_ICR_NECF);
+    
+    timeout_counter = 0U;
+    while ((USART2->ISR & USART_ISR_TC) == 0UL)
+    {
+        timeout_counter++;
+        if ((timeout_counter & 0xFFFU) == 0U) { BSP_IWDG_Refresh(); }
+    }
+    
+    /* Wait a bit more to ensure all bits transmitted */
+    for (volatile uint32_t d = 0U; d < 1000U; d++) { }
+    
+    BSP_GPIO_RS485_LoggingMode();  /* LOW = Return to logging/receive mode */
+    
+    /* Small delay after mode switch */
+    for (volatile uint32_t d = 0U; d < 500U; d++) { }
+    
+    SET_BIT(USART2->ICR, USART_ICR_ORECF | USART_ICR_FECF | USART_ICR_NECF);
     g_rs485_echo_count = 0U;
+    
+    /* Final flush to remove any echo that got through */
     BSP_RS485_RxFlush();
 }
 
@@ -216,9 +378,10 @@ void BSP_RS485_RxFlush(void)
 
 void BSP_RS485_IRQHandler(void)
 {
-    if ((USART1->ISR & USART_ISR_RXNE_RXFNE) != 0UL)
+    if ((USART2->ISR & USART_ISR_RXNE_RXFNE) != 0UL)
     {
-        uint8_t byte = (uint8_t)(USART1->RDR & 0xFFUL);
+        uint8_t byte = (uint8_t)(USART2->RDR & 0xFFUL);
+        
         if (g_rs485_echo_count > 0U)
         {
             g_rs485_echo_count--;
@@ -233,10 +396,15 @@ void BSP_RS485_IRQHandler(void)
             }
         }
     }
-    if ((USART1->ISR & (USART_ISR_FE | USART_ISR_ORE | USART_ISR_NE)) != 0UL)
+    if ((USART2->ISR & (USART_ISR_FE | USART_ISR_ORE | USART_ISR_NE)) != 0UL)
     {
-        SET_BIT(USART1->ICR, USART_ICR_FECF | USART_ICR_ORECF | USART_ICR_NECF);
+        SET_BIT(USART2->ICR, USART_ICR_FECF | USART_ICR_ORECF | USART_ICR_NECF);
     }
 }
 
-void USART1_IRQHandler(void) { BSP_RS485_IRQHandler(); }
+void BSP_USART2_IRQHandler(void) 
+{ 
+    BSP_RS485_IRQHandler(); 
+}
+
+void USART2_IRQHandler(void) { BSP_USART2_IRQHandler(); }

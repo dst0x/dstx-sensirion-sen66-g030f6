@@ -1,10 +1,10 @@
 # ===========================================================================
-# Makefile — SEN66 Modbus Gateway  (STM32G030F6P6)
+# Makefile — SEN66 Modbus Gateway  (STM32G031F8P6)
 # Toolchain : arm-none-eabi-gcc
 # Debug tool : OpenOCD + ST-Link
 # ===========================================================================
 
-TARGET   := sen66_g030f6
+TARGET   := sen66_g031f8
 BUILD    := build
 
 # ---------------------------------------------------------------------------
@@ -29,10 +29,12 @@ SRCS := main.c                        \
         bsp/bsp_clock.c               \
         bsp/bsp_gpio.c                \
         bsp/bsp_i2c.c                 \
+        bsp/bsp_iwdg.c                \
         bsp/bsp_systick.c             \
         bsp/bsp_uart.c                \
-        bsp/startup_stm32g030xx.c     \
+        bsp/startup_stm32g031xx.c     \
         drivers/drv_sen66.c           \
+        drivers/drv_co_infwin.c       \
         modbus/mb_crc.c               \
         modbus/mb_slave.c
 
@@ -44,13 +46,12 @@ OBJS := $(patsubst %.c, $(BUILD)/%.o, $(SRCS))
 # Root of project = include root so files use "bsp/...", "drivers/...", etc.
 INC := -I.
 
-# CMSIS device headers — adjust path to your local CMSIS installation
-CMSIS_ROOT ?= $(HOME)/STM32Cube/Repository/STM32Cube_FW_G0_V1.6.1/Drivers/CMSIS
-INC += -I$(CMSIS_ROOT)/Device/ST/STM32G0xx/Include
-INC += -I$(CMSIS_ROOT)/Include
+# CMSIS device headers — local copy inside project
+INC += -ICMSIS/Device/ST/STM32G0xx/Include
+INC += -ICMSIS/Include
 
-# Preprocessor defines
-DEFS := -DSTM32G030xx
+# Preprocessor defines (use G031xx for LPUART1 support)
+DEFS := -DSTM32G031xx
 
 # ---------------------------------------------------------------------------
 # Compiler flags
@@ -70,7 +71,7 @@ CFLAGS := $(MCU_FLAGS)               \
 # ---------------------------------------------------------------------------
 # Linker flags
 # ---------------------------------------------------------------------------
-LD_SCRIPT := STM32G030F6PX_FLASH.ld
+LD_SCRIPT := STM32G031F8PX_FLASH.ld
 
 LDFLAGS := $(MCU_FLAGS)                        \
             -T$(LD_SCRIPT)                     \

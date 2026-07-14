@@ -78,10 +78,12 @@ typedef struct
 {
     Sen66_State_t state;
     Sen66_Data_t  data;
+    Sen66_Data_t  last_valid_data;   /* Last known-good non-zero reading */
     uint32_t      start_tick;
     uint32_t      last_read_tick;
     uint8_t       error_count;
     bool          data_fresh;
+    bool          has_valid_data;    /* True once at least one valid reading stored */
     uint8_t       raw_meas[SEN66_MEAS_PAYLOAD_BYTES];
 } Sen66_Ctx_t;
 
@@ -92,5 +94,6 @@ Status_t      DRV_SEN66_Poll(Sen66_Ctx_t *ctx);
 Status_t      DRV_SEN66_Reset(Sen66_Ctx_t *ctx);
 Sen66_State_t DRV_SEN66_GetState(const Sen66_Ctx_t *ctx);
 uint8_t       DRV_SEN66_CalcCRC(const uint8_t data[2U]);
+bool          DRV_SEN66_IsDataReady(Sen66_Ctx_t *ctx);
 
 #endif /* DRV_SEN66_H */

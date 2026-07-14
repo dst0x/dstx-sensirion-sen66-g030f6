@@ -1,6 +1,6 @@
 /**
  * @file    bsp_clock.c
- * @brief   Clock configuration for STM32G030F6P6 — 64 MHz from HSI16 via PLL.
+ * @brief   Clock configuration for STM32G031F8P6 — 64 MHz from HSI16 via PLL.
  *
  * PLL configuration (HSI16 = 16 MHz):
  *   PLLM = /1  → VCO input  = 16 MHz

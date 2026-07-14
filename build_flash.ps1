@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-    Build and optionally flash SEN66-G030 firmware.
+    Build and optionally flash SEN66-G031 firmware.
 
 .DESCRIPTION
-    Compiles STM32G030F6P6 firmware using arm-none-eabi-gcc (no HAL).
+    Compiles STM32G031F8P6 firmware using arm-none-eabi-gcc (no HAL).
     Optionally flashes via OpenOCD + ST-Link.
 
 .PARAMETER Flash
@@ -27,9 +27,9 @@ $ErrorActionPreference = "Stop"
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-$TARGET    = "sen66_g030f6"
+$TARGET    = "sen66_g031f8"
 $BUILD     = "build"
-$LD_SCRIPT = "STM32G030F6PX_FLASH.ld"
+$LD_SCRIPT = "STM32G031F8PX_FLASH.ld"
 
 # CMSIS path — using local CMSIS directory
 $CMSIS_ROOT = "CMSIS"
@@ -54,8 +54,9 @@ $SRCS = @(
     "bsp\bsp_iwdg.c"
     "bsp\bsp_systick.c"
     "bsp\bsp_uart.c"
-    "bsp\startup_stm32g030xx.c"
+    "bsp\startup_stm32g031xx.c"
     "drivers\drv_sen66.c"
+    "drivers\drv_co_infwin.c"
     "modbus\mb_crc.c"
     "modbus\mb_slave.c"
 )
@@ -65,7 +66,7 @@ $SRCS = @(
 # ---------------------------------------------------------------------------
 $MCU_STR  = "-mcpu=cortex-m0plus -mthumb -mfloat-abi=soft"
 $INC_STR  = "-I. -I`"$CMSIS_ROOT\Device\ST\STM32G0xx\Include`" -I`"$CMSIS_ROOT\Include`""
-$DEF_STR  = "-DSTM32G030xx"
+$DEF_STR  = "-DSTM32G031xx"
 $OPT_STR  = "-std=c11 -Wall -Wextra -Wno-unused-parameter -ffunction-sections -fdata-sections -ffreestanding -fno-common -Os"
 
 $CFLAGS_STR  = "$MCU_STR $INC_STR $DEF_STR $OPT_STR"
